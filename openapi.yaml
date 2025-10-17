@@ -4,7 +4,7 @@ info:
   version: 1.0.0
   description: Tools to assist with parsing, reviewing, and revising NIH grant proposals.
 servers:
-  - url: https://your-api-url.com
+  - url: https://nih-grant-assistant.onrender.com/
 paths:
   /parse-grant-sections:
     post:
