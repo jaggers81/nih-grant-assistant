@@ -1,0 +1,174 @@
+openapi: 3.1.0
+info:
+  title: NIH Grant Assistant API
+  version: 1.0.0
+  description: Tools to assist with parsing, reviewing, and revising NIH grant proposals.
+servers:
+  - url: https://your-api-url.com
+paths:
+  /parse-grant-sections:
+    post:
+      operationId: parseGrantSections
+      summary: Automatically detect and outline NIH grant sections.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                document:
+                  type: string
+                  description: The uploaded NIH grant proposal draft text or file content.
+              required: [document]
+      responses:
+        '200':
+          description: Parsed grant sections
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  sections:
+                    type: array
+                    items:
+                      type: string
+
+  /run-compliance-check:
+    post:
+      operationId: runComplianceCheck
+      summary: Compare sections against NIH SF424 compliance.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                parsed_sections:
+                  type: array
+                  items:
+                    type: string
+              required: [parsed_sections]
+      responses:
+        '200':
+          description: Compliance check results
+
+  /generate-reviewer-feedback:
+    post:
+      operationId: generateReviewerFeedback
+      summary: Generate structured reviewer feedback.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                document:
+                  type: string
+                review_focus:
+                  type: string
+                  description: Optional review area.
+              required: [document]
+      responses:
+        '200':
+          description: Reviewer feedback
+
+  /revise-based-on-feedback:
+    post:
+      operationId: reviseBasedOnFeedback
+      summary: Revise grant text based on feedback.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                original_text:
+                  type: string
+                feedback:
+                  type: string
+              required: [original_text, feedback]
+      responses:
+        '200':
+          description: Revised text
+
+  /nih-style-rewrite:
+    post:
+      operationId: nihStyleRewrite
+      summary: Rewrite in NIH style.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                text:
+                  type: string
+                emphasis:
+                  type: string
+                  description: Optional emphasis area
+              required: [text]
+      responses:
+        '200':
+          description: Rewritten text
+
+  /analyze-page-limits:
+    post:
+      operationId: analyzePageLimits
+      summary: Estimate page usage and flag overages.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                section_text:
+                  type: string
+              required: [section_text]
+      responses:
+        '200':
+          description: Page analysis results
+
+  /export-review-report:
+    post:
+      operationId: exportReviewReport
+      summary: Export formatted review summary.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                review_summary:
+                  type: string
+                file_format:
+                  type: string
+                  enum: [docx, pdf]
+              required: [review_summary]
+      responses:
+        '200':
+          description: Link to generated report
+
+  /track-revision-history:
+    post:
+      operationId: trackRevisionHistory
+      summary: Save revision summary to history.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                revision_summary:
+                  type: string
+              required: [revision_summary]
+      responses:
+        '200':
+          description: Revision recorded
